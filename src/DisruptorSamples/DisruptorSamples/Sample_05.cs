@@ -18,15 +18,15 @@ namespace DisruptorSamples
         [TestMethod]
         public void Sample_05_DR_SP_Tx()
         {
-            var d = NewDisruptor();
+            var disruptor = NewDisruptor();
 
-            d.HandleEventsWith(
+            disruptor.HandleEventsWith(
                 new ThreadSleepRandomEventHandler(),
                 new ThreadSleepConstantEventHandler());
 
             try
             {
-                var ringbuffer = d.Start();
+                var ringbuffer = disruptor.Start();
 
                 var producer = new EventProducerWithTranslator(ringbuffer);
 
@@ -37,7 +37,7 @@ namespace DisruptorSamples
             }
             finally
             {
-                d.Shutdown();
+                disruptor.Shutdown();
             }
         }
 
@@ -51,7 +51,7 @@ namespace DisruptorSamples
 
         internal class TheRingBufferSlotType
         {
-            public byte TheValue { get; set; }
+            public byte TheValue;
         }
 
         internal class ThreadSleepRandomEventHandler : IEventHandler<TheRingBufferSlotType>

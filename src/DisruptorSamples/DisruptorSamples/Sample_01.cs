@@ -7,24 +7,26 @@ namespace DisruptorSamples
     [TestClass]
     public class Sample_01
     {
+        private const ulong MAX_ITERATIONS = 1_000_000;
+
         /// <summary>
-        /// Sample 01: Disruptor with single Reader.
+        /// Sample 01: Disruptor with a single Reader.
         /// </summary>
         [TestMethod]
         public void Sample_01_SR()
         {
-            var d = NewDisruptor();
+            var disruptor = NewDisruptor();
 
-            d.HandleEventsWith(new SummingEventHandler());
+            disruptor.HandleEventsWith(new SummingEventHandler());
 
             try
             {
-                var ringbuffer = d.Start();
+                var ringbuffer = disruptor.Start();
                 PublishTo(ringbuffer);
             }
             finally
             {
-                d.Shutdown();
+                disruptor.Shutdown();
             }
         }
 
@@ -38,7 +40,7 @@ namespace DisruptorSamples
 
         internal class TheRingBufferSlotType
         {
-            public byte TheValue { get; set; }
+            public byte TheValue;
         }
 
         internal class SummingEventHandler : IEventHandler<TheRingBufferSlotType>
@@ -54,13 +56,11 @@ namespace DisruptorSamples
         {
             for (ulong ix = 0; ix < MAX_ITERATIONS; ix++)
             {
-                long seqNum = ringbuffer.Next();
-                var slot = ringbuffer[seqNum];
+                long sequenceNumber = ringbuffer.Next();
+                var slot = ringbuffer[sequenceNumber];
                 slot.TheValue = 1;
-                ringbuffer.Publish(seqNum);
+                ringbuffer.Publish(sequenceNumber);
             }
         }
-
-        private const ulong MAX_ITERATIONS = 1_000_000;
     }
 }

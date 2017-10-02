@@ -7,6 +7,8 @@ namespace DisruptorSamples
     [TestClass]
     public class Sample_02
     {
+        private const ulong MAX_ITERATIONS = 1_000_000;
+
         private static Disruptor.Dsl.Disruptor<TheRingBufferSlotType> _disruptor = null;
 
         private static RingBuffer<TheRingBufferSlotType> _ringbuffer = null;
@@ -47,7 +49,7 @@ namespace DisruptorSamples
 
         internal class TheRingBufferSlotType
         {
-            public byte TheValue { get; set; }
+            public byte TheValue;
         }
 
         internal class SummingEventHandler : IEventHandler<TheRingBufferSlotType>
@@ -63,13 +65,11 @@ namespace DisruptorSamples
         {
             for (ulong ix = 0; ix < MAX_ITERATIONS; ix++)
             {
-                long seqNum = ringbuffer.Next();
-                var slot = ringbuffer[seqNum];
+                long sequenceNumber = ringbuffer.Next();
+                var slot = ringbuffer[sequenceNumber];
                 slot.TheValue = 1;
-                ringbuffer.Publish(seqNum);
+                ringbuffer.Publish(sequenceNumber);
             }
         }
-
-        private const ulong MAX_ITERATIONS = 1_000_000;
     }
 }

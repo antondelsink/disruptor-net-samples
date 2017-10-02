@@ -62,7 +62,7 @@ namespace DisruptorSamples
 
         internal class TheRingBufferSlotType
         {
-            public byte TheValue { get; set; }
+            public byte TheValue;
         }
 
         internal class MockBusinessLogicEventHandler : IEventHandler<TheRingBufferSlotType>

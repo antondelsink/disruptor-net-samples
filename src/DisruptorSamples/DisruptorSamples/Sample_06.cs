@@ -61,7 +61,7 @@ namespace DisruptorSamples
 
         internal class TheRingBufferSlotType
         {
-            public byte TheValue { get; set; }
+            public byte TheValue;
         }
 
         internal class ThreadSleepRandomEventHandler : IEventHandler<TheRingBufferSlotType>
