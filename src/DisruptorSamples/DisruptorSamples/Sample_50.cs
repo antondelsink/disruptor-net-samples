@@ -9,7 +9,7 @@ namespace DisruptorSamples
     [TestClass]
     public class Sample_50
     {
-        private const ulong ITERATIONS = 1_000_000;
+        private const ulong ITERATIONS = 1_000;
 
         [TestMethod]
         public void Sample_50_ReplicatingPair()
@@ -56,7 +56,7 @@ namespace DisruptorSamples
                     "timed out waiting for replica business logic to complete");
 
                 stopwatch.Stop();
-                Assert.IsTrue(stopwatch.ElapsedMilliseconds < 750, "too slow!");
+                Assert.IsTrue(stopwatch.ElapsedMilliseconds < 750, $"too slow! {stopwatch.ElapsedMilliseconds}ms");
 
                 Assert.IsTrue(primary_businesslogic.LastSeenSequenceNumber == replica_businesslogic.LastSeenSequenceNumber);
             }
